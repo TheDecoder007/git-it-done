@@ -1,4 +1,8 @@
 
+
+
+
+
 var userFormEl = document.querySelector('#user-form');
 var nameInputEl = document.querySelector('#username');
 var repoContainerEl = document.querySelector("#repos-container");
@@ -26,17 +30,30 @@ var getUserRepos = function(user) {
   var apiUrl = "https://api.github.com/users/" + user + "/repos";
   
   fetch(apiUrl).then(function(response) {
-      console.log(response);
+//log an error for bad search/search with no repo
+      if (response.ok) {
         response.json().then(function(data) { 
 //when response data is converted to JSON, it gets sent from getUserRepos to displayRepos
             displayRepos(data, user);
             console.log(data);
           });
-    });
-};
+        } else {
+          alert("Error: GitHub user not found");
+        }
+    })
+//catch network errors
+      .catch(function(error) {
+        alert("Unable to connect to GitHub");
+      });
+}; 
 
 //accepts the array of repository data, and the term we searched for as parameters
 var displayRepos = function(repos, searchTerm) {
+//check if api returned has any repos
+    if (repos.length === 0) {
+      repoContainerEl.textContent = "No repositories found.";
+      return;
+    }
 //clear old content from repos display
 repoContainerEl.textContent = "";
 repoSearchTerm.textContent = searchTerm;
