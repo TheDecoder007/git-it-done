@@ -1,7 +1,35 @@
-var limitWarningEl = document.querySelector("#limit-warning");
 
+var limitWarningEl = document.querySelector("#limit-warning");
+//DOM reference to update <span id="repo-name"> container in HTML
+var repoNameEl = document.querySelector("#repo-name");
+ 
 //reference to issues container, to append displayIssues to actual page
 var issueContainerEl = document.querySelector("#issues-container");
+
+//extracts query value from query string in the api call function getRepoIssues
+//(divs on single page show issues from repo clicked on index)
+var getRepoName = function() {
+
+    //grab repo name from url query string
+    var queryString = document.location.search;
+  var repoName = queryString.split("=")[1];
+
+  //pass repoName into getRepoIssues, will fetch the related issues from api endpoint
+  // getRepoIssues(repoName);
+  //puts repoName in the <span id #repo-name)
+  // repoNameEl.textContent = repoName;
+
+  //conditional statement that checks if repoName exists (instead of code above)
+  if(repoName) {
+      //display repo name on the page
+      repoNameEl.textContent = repoName;
+      getRepoIssues(repoName);
+  }
+  //redirects back to homepage if repoName doesnt exist
+   else {
+       document.location.replace("./index.html");
+   }
+};
 
 var getRepoIssues = function (repo) {
   console.log(repo);
@@ -22,7 +50,8 @@ var getRepoIssues = function (repo) {
         }
       });
     } else {
-      alert("There was a problem with your request.");
+        //if not successful, redirect to homepage
+        document.location.replace("./index.html");
     }
   });
 };
@@ -82,4 +111,5 @@ var displayWarning = function(repo) {
   limitWarningEl.appendChild(linkEl);
   };
 
-getRepoIssues("angular/angular");
+  getRepoName();
+getRepoIssues();
