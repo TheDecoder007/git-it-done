@@ -17,6 +17,7 @@ var formSubmitHandler = function(event) {
     if (username) {
       getUserRepos(username);
 //clears the form after search
+      repoContainerEl.textContent = "";
       nameInputEl.value = "";
     } else {
       alert("Pleae enter a gitHub username");
@@ -29,13 +30,14 @@ var formSubmitHandler = function(event) {
 var getUserRepos = function(user) {
   var apiUrl = "https://api.github.com/users/" + user + "/repos";
   
-  fetch(apiUrl).then(function(response) {
+  fetch(apiUrl)
+    .then(function(response) {
 //log an error for bad search/search with no repo
       if (response.ok) {
         response.json().then(function(data) { 
 //when response data is converted to JSON, it gets sent from getUserRepos to displayRepos
-            displayRepos(data, user);
             console.log(data);
+            displayRepos(data, user);
           });
         } else {
           alert("Error: GitHub user not found");
@@ -55,10 +57,9 @@ var displayRepos = function(repos, searchTerm) {
       return;
     }
 //clear old content from repos display
-repoContainerEl.textContent = "";
+
 repoSearchTerm.textContent = searchTerm;
-  console.log(repos);
-  console.log(searchTerm);
+
 
 //loop over repos
 for (var i = 0; i < repos.length; i++) {
