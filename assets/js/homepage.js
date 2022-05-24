@@ -112,6 +112,17 @@ var getFeaturedRepos = function(language) {
   });
 };
 
+//event delegation to handle all clicks on buttons
+buttonClickHandler = function(event) {
+  var language = event.target.getAttribute("data-language");
+//gets language selected and calls getFeaturedRepos
+    if (language) {
+      getFeaturedRepos(language);
+
+//clear old content
+      repoContainerEl.textContent = "";
+    }
+}
 
 userFormEl.addEventListener("submit", formSubmitHandler);
 languageButtonsEl.addEventListener("click", buttonClickHandler);
